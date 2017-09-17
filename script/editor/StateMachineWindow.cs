@@ -33,6 +33,8 @@ namespace StateTracker.Editor
                 return;
             }
 
+            windowArea.OnGUI(target.states.Select(s => GetFrame(s) as IRectBasedGUI));
+
             foreach (var state in target.states)
             {
                 foreach (var transition in state.transitions)
@@ -41,8 +43,6 @@ namespace StateTracker.Editor
                     GetFrame(state).DrawLine(GetFrame(transition.destinationName));
                 }
             }
-
-            windowArea.OnGUI(target.states.Select(s => GetFrame(s) as IRectBasedGUI));
         }
 
         private StateFrame GetFrame(string destinationName)
