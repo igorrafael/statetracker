@@ -9,6 +9,7 @@ namespace StateTracker.StateMachine
     public class State : IEquatable<State>
     {
         public string name;
+        public Vector2 position;
         public List<Transition> transitions = new List<Transition>();
 
         public bool Equals(State other)
