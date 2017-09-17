@@ -9,10 +9,10 @@ namespace StateTracker.Editor
 {
     class StateFrame : IRectBasedGUI
     {
-        public Rect windowRect;
         static int nextId = 0;
         int _id;
         private Vector2 size = new Vector2(150,50);
+        private Rect _windowRect;
 
         public State State
         {
@@ -20,18 +20,25 @@ namespace StateTracker.Editor
             private set;
         }
 
+        public Rect rect
+        {
+            get
+            {
+                return _windowRect;
+            }
+        }
+
         public StateFrame(State state)
         {
             _id = nextId++;
             State = state;
 
-            windowRect = new Rect(state.position, size);
+            _windowRect = new Rect(state.position, size);
         }
 
         public void OnGUI(Rect rect)
         {
-            windowRect = GUILayout.Window(_id, windowRect, OnWindowDraw, State.name);
-            State.position = windowRect.position;
+            _windowRect = GUILayout.Window(_id, _windowRect, OnWindowDraw, State.name);
         }
 
         private void OnWindowDraw(int id)
@@ -43,7 +50,7 @@ namespace StateTracker.Editor
 
         internal void DrawLine(StateFrame other)
         {
-            Handles.DrawLine(windowRect.center, other.windowRect.center);
+            Handles.DrawLine(_windowRect.center, other._windowRect.center);
         }
     }
 }
