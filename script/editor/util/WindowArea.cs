@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEditor;
 
 namespace StateTracker.Editor
@@ -16,18 +19,32 @@ namespace StateTracker.Editor
             _view = new Rect(rect.position, rect.size * 0.9f);
         }
 
-        public void Begin()
+        public void OnGUI(IEnumerable<IRectBasedGUI> targets)
         {
             _rect = GUILayoutUtility.GetRect(128, 1024, 128, 1024);
+
             _position = GUI.BeginScrollView(_rect, _position, _view);
-            DrawGrid();
-            _parent.BeginWindows();
+            {
+                DrawGrid();
+                _parent.BeginWindows();
+                {
+                    foreach (IRectBasedGUI target in targets)
+                    {
+                        target.OnGUI(_rect);
+                    }
+                }
+                _parent.EndWindows();
+            }
+
+            GUI.EndScrollView();
+        }
+
+        public void Begin()
+        {
         }
 
         public void End()
         {
-            _parent.EndWindows();
-            GUI.EndScrollView(); // Closes scrollView.
         }
 
         void DrawGrid()

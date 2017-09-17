@@ -42,9 +42,7 @@ namespace StateTracker.Editor
                 }
             }
 
-            windowArea.Begin();
-            target.states.ForEach(s => GetFrame(s).OnGUI());
-            windowArea.End();
+            windowArea.OnGUI(target.states.Select(s => GetFrame(s) as IRectBasedGUI));
         }
 
         private StateFrame GetFrame(string destinationName)

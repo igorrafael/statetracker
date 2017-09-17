@@ -7,7 +7,7 @@ using System;
 
 namespace StateTracker.Editor
 {
-    class StateFrame
+    class StateFrame : IRectBasedGUI
     {
         public Rect windowRect;
         static int nextId = 0;
@@ -28,7 +28,7 @@ namespace StateTracker.Editor
             windowRect = new Rect(state.position, size);
         }
 
-        public void OnGUI()
+        public void OnGUI(Rect rect)
         {
             windowRect = GUILayout.Window(_id, windowRect, OnWindowDraw, State.name);
             State.position = windowRect.position;
