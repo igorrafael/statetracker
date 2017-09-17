@@ -2,7 +2,7 @@
 using UnityEditor;
 using StateTracker.StateMachine;
 using System.Collections.Generic;
-using System;
+using System.Linq;
 
 namespace StateTracker.Editor
 {
@@ -10,6 +10,7 @@ namespace StateTracker.Editor
     {
         Tracker target;
         List<StateFrame> frames = new List<StateFrame>();
+        private WindowArea windowArea;
 
         [MenuItem("StateTracker/State Machine View")]
         public static void ShowWindow()
@@ -19,24 +20,31 @@ namespace StateTracker.Editor
 
         void OnGUI()
         {
+            Rect windowRect = new Rect
+            {
+                size = position.size * 0.95f
+            };
+            windowArea = new WindowArea(windowRect, this);
+
             target = EditorGUILayout.ObjectField(target, typeof(Tracker), true) as Tracker;
+            target = target ?? Resources.FindObjectsOfTypeAll<Tracker>().First();
             if (!target)
             {
                 return;
             }
-            
-            BeginWindows();
+
             foreach (var state in target.states)
             {
-                StateFrame frame = GetFrame(state);
-                frame.OnGUI();
                 foreach (var transition in state.transitions)
                 {
                     EditorGUILayout.LabelField(state.name + "->" + transition.destinationName);
-                    frame.DrawLine(GetFrame(transition.destinationName));
+                    GetFrame(state).DrawLine(GetFrame(transition.destinationName));
                 }
             }
-            EndWindows();
+
+            windowArea.Begin();
+            target.states.ForEach(s => GetFrame(s).OnGUI());
+            windowArea.End();
         }
 
         private StateFrame GetFrame(string destinationName)
