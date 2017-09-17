@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using UnityEditor;
-using System.Collections;
+﻿using UnityEditor;
+using StateTracker.StateMachine;
 
-namespace StateTracker {
+namespace StateTracker.Editor
+{
     class StateMachineWindow : EditorWindow
     {
-        StateMachine target;
+        Tracker target;
 
         [MenuItem("StateTracker/State Machine View")]
         public static void ShowWindow()
@@ -15,14 +15,17 @@ namespace StateTracker {
 
         void OnGUI()
         {
-            target = EditorGUILayout.ObjectField(target, typeof(StateMachine), true) as StateMachine;
+            target = EditorGUILayout.ObjectField(target, typeof(Tracker), true) as Tracker;
             if (!target)
             {
                 return;
             }
-            foreach (var state in target.States)
+            foreach (var state in target.states)
             {
-                EditorGUILayout.LabelField(state.name);
+                foreach (var transition in state.transitions)
+                {
+                    EditorGUILayout.LabelField(state.name + "->" + transition.destinationName);
+                }
             }
         }
     }

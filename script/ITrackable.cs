@@ -4,7 +4,7 @@ namespace StateTracker
 {
     public interface ITrackable<T> where T : struct, IConvertible
     {
-        StateMachine StateMachine
+        StateMachine.Tracker StateMachine
         {
             get;
         }

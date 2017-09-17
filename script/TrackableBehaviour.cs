@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
+using StateTracker.StateMachine;
 
 namespace StateTracker
 {
@@ -9,9 +8,9 @@ namespace StateTracker
         where T : struct, IConvertible
     {
         [SerializeField]
-        private StateMachine _stateMachine;
+        private Tracker _stateMachine;
 
-        public StateMachine StateMachine
+        public Tracker StateMachine
         {
             get
             {

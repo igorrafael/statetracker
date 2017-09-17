@@ -3,35 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace StateTracker
+namespace StateTracker.StateMachine
 {
-    public class StateMachine : ScriptableObject
+    [Serializable]
+    public class State : IEquatable<State>
     {
-        [Serializable]
-        public class State : IEquatable<State>
+        public string name;
+        public List<Transition> transitions = new List<Transition>();
+
+        public bool Equals(State other)
         {
-            public string name;
-
-            public bool Equals(State other)
-            {
-                return name == other.name;
-            }
+            return name == other.name;
         }
+    }
 
-        [Serializable]
-        public class Transition
-        {
-            public State source, destination;
-            public Event action;
-        }
+    [Serializable]
+    public class Transition
+    {
+        public string destinationName;
+        public Event action;
+    }
 
-        public List<Transition> Transitions = new List<Transition>();
-        public IEnumerable<State> States
+
+    public class Tracker : ScriptableObject
+    {
+        public List<State> states = new List<State>();
+        public IEnumerable<Transition> Transitions
         {
             get
             {
-                var sources = Transitions.Select(t => t.source);
-                var destinations = Transitions.Select(t => t.destination);
+                var sources = states.SelectMany(s => s.transitions);
+                var destinations = states.SelectMany(t => t.transitions);
                 return sources.Union(destinations).Distinct();
             }
         }
