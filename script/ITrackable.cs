@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace StateTracker
 {
-    public interface ITrackable<T>
+    public interface ITrackable<T> where T : struct, IConvertible
     {
-        T[] States
+        StateMachine StateMachine
         {
             get;
         }
-        Dictionary<T, T[]> Transitions
+
+        T CurrentState
         {
             get;
         }

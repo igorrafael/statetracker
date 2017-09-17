@@ -5,26 +5,23 @@ using UnityEngine;
 
 namespace StateTracker
 {
-    public class TrackableBehaviour<T> : MonoBehaviour, ITrackable<T>
+    public abstract class TrackableBehaviour<T> : MonoBehaviour, ITrackable<T>
         where T : struct, IConvertible
     {
-        public T[] States
+        [SerializeField]
+        private StateMachine _stateMachine;
+
+        public StateMachine StateMachine
         {
             get
             {
-                Array values = Enum.GetValues(typeof(T));
-                return values as T[];
+                return _stateMachine;
             }
         }
 
-        public Dictionary<T, T[]> Transitions
+        public abstract T CurrentState
         {
-            get
-            {
-                return _transitions;
-            }
+            get;
         }
-
-        private Dictionary<T, T[]> _transitions = new Dictionary<T, T[]>();
     }
 }
