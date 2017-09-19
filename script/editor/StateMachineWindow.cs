@@ -27,7 +27,17 @@ namespace StateTracker.Editor
             windowArea = new WindowArea(windowRect, this);
 
             target = EditorGUILayout.ObjectField(target, typeof(Tracker), true) as Tracker;
-            //target = target ?? Resources.FindObjectsOfTypeAll<Tracker>().First();
+            if (!target)
+            {
+                var trackers = Resources.FindObjectsOfTypeAll<Tracker>();
+                foreach(Tracker tracker in trackers)
+                {
+                    if (GUILayout.Button(tracker.name))
+                    {
+                        target = tracker;
+                    }
+                }
+            }
             if (!target)
             {
                 return;
